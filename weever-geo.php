@@ -135,6 +135,12 @@ function weevergeo_geolocation_filter( $clauses, $query ) {
         // Order by the distance
         $clauses['orderby'] = "weever_geodistance ASC";
 
+    	$limit = ( is_numeric( get_query_var( 'limit' ) ) and get_query_var( 'limit' ) > 0 ) ? get_query_var( 'limit' ) : 15;
+    	$page = ( is_numeric( get_query_var( 'page' ) ) and get_query_var( 'page' ) > 0 ) ? get_query_var( 'page' ) : 1;
+    	$offset = ( is_numeric( get_query_var( 'start' ) ) and get_query_var( 'start' ) > 0 ) ? get_query_var( 'start' ) : ( ( $page - 1 ) * $limit );
+
+		$clauses['limits'] = 'LIMIT ' . $offset . ', ' . $limit;
+
         // And off we go!
         return $clauses;
     } else {
